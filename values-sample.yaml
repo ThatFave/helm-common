@@ -57,11 +57,3 @@ resources:
 service:
   type: ClusterIP
   port: 80
-
-ingress:
-  enabled: true
-  hosts:
-    - host: app.example.com
-      paths:
-        - path: /
-          pathType: ImplementationSpecific

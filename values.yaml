@@ -2,11 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# Namespace settings
-namespace:
-  create: true
-  name: default
-
 # Container definitions - can have multiple containers
 containers:
   - name: main
@@ -46,27 +41,12 @@ service:
   type: ClusterIP
   port: 80
 
-# Ingress settings
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-  hosts: []
-  tls: []
-
 # Resource requests and limits
 resources: {}
 
 # Liveness and readiness probes
 livenessProbe: {}
 readinessProbe: {}
-
-# Autoscaling settings
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
 
 # Volume settings
 volumes: []

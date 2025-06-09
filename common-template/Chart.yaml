@@ -1,5 +1,0 @@
-apiVersion: v2
-name: common-template
-description: A Helm chart for Kubernetes with support for Tailscale ingress
-version: 0.1.0
-appVersion: "1.0"

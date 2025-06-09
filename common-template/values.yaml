@@ -1,0 +1,40 @@
+# Default values for common-template.
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Docker containers configuration
+containers:
+  - name: main
+    image: nginx:stable
+    ports:
+      - containerPort: 80
+    env: []
+
+# Namespace configuration
+createNamespace: false
+# Tailscale Ingress configuration
+tailscaleIngress:
+  enabled: false
+  hostnames: []
+  serviceName: ""
+  servicePort: 80
+  tailnet: ""
+  acmeEmail: ""
+  ingressClassName: "tailscale"
+namespaceName: default

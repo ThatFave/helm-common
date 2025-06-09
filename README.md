@@ -4,15 +4,13 @@ A flexible Helm chart for deploying arbitrary Docker/OCI images with common conf
 
 ## Description
 
-This Helm chart provides a generic way to deploy containers in Kubernetes. It supports multiple containers, configurable resources, service exposure, ingress configuration, and more.
+This Helm chart provides a generic way to deploy containers in Kubernetes. It supports multiple containers, configurable resources, service exposure, and more.
 
 ## Features
 
 - Multiple container support
 - Configurable resource requests and limits
 - Service exposure (ClusterIP, NodePort, LoadBalancer)
-- Ingress configuration
-- Autoscaling (HPA)
 - ConfigMaps and Secrets for environment variables
 - Volume mounts and persistent storage
 - Node affinity, tolerations, and selectors
@@ -65,7 +63,6 @@ The following table lists the configurable parameters of the Helm chart and thei
 | `serviceAccount.create` | Create a service account for the deployment | `true` |
 | `service.type` | Type of service to create (ClusterIP, NodePort, LoadBalancer) | `"ClusterIP"` |
 | `service.port` | Port for the service | `80` |
-| `ingress.enabled` | Enable ingress configuration | `false` |
 
 For a full list of configurable parameters and examples, see `values-sample.yaml`.
 

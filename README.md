@@ -75,56 +75,52 @@ To use this Helm chart with FluxCD, you need to create a GitOps repository with 
 
 1. Create a new directory in your GitOps repository for the Helm release:
 
-   ```bash
-   mkdir -p clusters/my-cluster/apps/my-app
-   ```
+  ```yaml
+  apiVersion: source.toolkit.fluxcd.io/v1beta2
+  kind: OCIRepository
+  metadata:
+    name: helm-common
+    namespace: flux-system
+  spec:
+    interval: 1h
+    url: oci://ghcr.io/thatfave/helm-common/helm-common-chart
+    ref:
+      semver: ">= 0.1.0"
+  ```
 
-2. Create a `values.yaml` file with your custom configuration:
+2. Create a `helm-release.yaml` file with the following content:
 
-   ```yaml
-   namespace:
-     name: my-app-namespace
+  ```yaml
+  apiVersion: helm.toolkit.fluxcd.io/v2
+  kind: HelmRelease
+  metadata:
+    name: helm-common
+    namespace: helm-common
+  spec:
+    interval: 5m
+    chartRef:
+      kind: OCIRepository
+      name: helm-common
+      namespace: flux-system
+    values:
+      namespace:
+        create: true
+        name: my-app-namespace
 
-   containers:
-     - name: web
-       image:
-         repository: nginx
-         tag: stable
-       env:
-         - name: ENVIRONMENT
-           value: production
-   ```
+      containers:
+        - name: web
+          image:
+            repository: nginx
+            tag: stable
+          env:
+            - name: ENVIRONMENT
+              value: production
 
-3. Create a `helm-release.yaml` file with the following content:
+      service:
+        type: ClusterIP
+        port: 80
+  ```
 
-   ```yaml
-   apiVersion: helm.toolkit.fluxcd.io/v2beta1
-   kind: HelmRelease
-   metadata:
-     name: my-app
-     namespace: flux-system
-   spec:
-     interval: 5m
-     chart:
-       spec:
-         chart: helm-common/helm-common-chart
-         sourceRef:
-           kind: GitRepository
-           name: flux-system
-           namespace: flux-system
-         version: "0.1.0"
-     valuesFrom:
-       - kind: Secret
-         name: my-app-values
-         valuesKey: values.yaml
-   ```
-
-4. Create a Kubernetes secret with your `values.yaml` file:
-
-   ```bash
-   kubectl create secret generic my-app-values --from-file=values.yaml -n flux-system
-   ```
-
-5. Commit and push the changes to your GitOps repository.
+3. Commit and push the changes to your GitOps repository.
 
 FluxCD will automatically detect the new HelmRelease manifest and deploy the application using the Helm chart with the specified configuration.

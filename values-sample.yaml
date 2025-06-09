@@ -1,8 +1,5 @@
 # Sample values file for helm-common-chart
 
-namespace:
-  name: my-app-namespace
-
 containers:
   - name: web
     image:

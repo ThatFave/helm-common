@@ -57,8 +57,6 @@ The following table lists the configurable parameters of the Helm chart and thei
 
 | Parameter | Description | Default |
 | --- | --- | --- |
-| `namespace.create` | Create a new namespace for the deployment | `true` |
-| `namespace.name` | Name of the namespace to use | `"default"` |
 | `containers` | List of containers to deploy | `[{"name": "main", "image": {"repository": "nginx"}}]` |
 | `serviceAccount.create` | Create a service account for the deployment | `true` |
 | `service.type` | Type of service to create (ClusterIP, NodePort, LoadBalancer) | `"ClusterIP"` |
@@ -100,10 +98,6 @@ To use this Helm chart with FluxCD, you need to create a GitOps repository with 
       name: helm-common
       namespace: flux-system
     values:
-      namespace:
-        create: true
-        name: my-app-namespace
-
       containers:
         - name: web
           image:

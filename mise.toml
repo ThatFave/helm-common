@@ -1,0 +1,9 @@
+[tools]
+helm = "3.18.2"
+
+[tasks]
+package-chart = "helm package ./"
+push-chart = '''
+echo $env:HELM_REGISTRY_PASSWORD | helm registry login ghcr.io -u $env:HELM_REGISTRY_USER --password-stdin
+helm push helm-common-chart-0.1.0.tgz oci://ghcr.io/thatfave/helm-common
+'''

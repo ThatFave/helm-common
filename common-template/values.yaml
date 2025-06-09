@@ -25,6 +25,20 @@ containers:
     ports:
       - containerPort: 80
     env: []
+    # External secrets to be used as environment variables
+    # Format: secretName:envVarName
+    externalSecrets: {}
+    # Config files to be mounted as volumes
+    # Format: configFileName: { mountPath, data }
+    configFiles: {}
+
+# Persistent storage configuration
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  existingClaim: ""
+  mountPath: /data
 
 # Namespace configuration
 createNamespace: false

@@ -21,8 +21,38 @@ spec:
             - containerPort: {{ .containerPort }}
 {{- end }}
           env:
+{{- if .externalSecrets }}
+{{- range $secretName, $envVarName := .externalSecrets }}
+            - name: {{ $envVarName }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ $envVarName }}
+{{- end }}
+{{- end }}
 {{- range .env }}
             - name: {{ .name }}
               value: {{ .value }}
 {{- end }}
+          volumeMounts:
+{{- if and (.mountPath) (index $.Values.persistence "enabled") }}
+            - name: storage
+              mountPath: {{ .mountPath | default (index $.Values.persistence "mountPath") }}
+{{- end }}
+{{- if .configFiles }}
+{{- range $configName, $config := .configFiles }}
+            - name: {{ printf "%s-%s" $.Release.Name $configName }}
+              mountPath: {{ $config.mountPath | default (printf "/etc/%s" $configName) }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+      volumes:
+{{- if and (index $.Values.persistence "enabled") (not (index $.Values.persistence "existingClaim")) }}
+        - name: storage
+          emptyDir: {}
+{{- else if index $.Values.persistence "enabled" }}
+        - name: storage
+          persistentVolumeClaim:
+            claimName: {{ index $.Values.persistence "existingClaim" | default (printf "%s-storage" $.Release.Name) }}
 {{- end }}

@@ -1,0 +1,11 @@
+{{- range .Values.configFiles }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-%s" (include "helm-common-chart.fullname" $) .name }}
+  labels:
+    {{- include "helm-common-chart.labels" $ | nindent 4 }}
+data:
+  {{- toYaml .data | nindent 2 }}
+---
+{{- end }}

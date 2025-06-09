@@ -1,0 +1,67 @@
+# Sample values file for helm-common-chart
+
+namespace:
+  name: my-app-namespace
+
+containers:
+  - name: web
+    image:
+      repository: nginx
+      tag: stable
+      pullPolicy: IfNotPresent
+    env:
+      - name: ENVIRONMENT
+        value: production
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: db-secret
+            key: url
+
+  - name: api
+    image:
+      repository: my-org/my-api
+      tag: v1.2.3
+      pullPolicy: IfNotPresent
+    ports:
+      - name: http
+        containerPort: 8080
+        protocol: TCP
+
+configFiles:
+  - name: app-config
+    mountPath: /etc/config/app.yaml
+    data:
+      apiUrl: "https://api.example.com"
+      timeout: 30
+      retries: 5
+
+volumes:
+  - name: config-volume
+    configMap:
+      name: app-config
+
+volumeMounts:
+  - name: config-volume
+    mountPath: /etc/config
+    readOnly: true
+
+resources:
+  limits:
+    cpu: "1"
+    memory: "512Mi"
+  requests:
+    cpu: "0.5"
+    memory: "256Mi"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  hosts:
+    - host: app.example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
